@@ -7,10 +7,11 @@ amqp.connect(config.rabbitMQUrl, (error0, connection) => {
         if (error1) throw error1
 
         const queue = config.rabbitMQQueueName;
-        const msg   = 'Hello World!!';
+        const msg   = process.argv.slice(2).join(' ') || "Hello World!";
 
-        channel.assertQueue(queue, {durable: false});
-        channel.sendToQueue(queue, Buffer.from(msg));
+        channel.assertQueue(queue, {durable: true});
+        channel.sendToQueue(queue, Buffer.from(msg), {persistent: true});
+        console.log(` [x] Sent ${msg}`);
 
         setTimeout(() => {
             connection.close();
