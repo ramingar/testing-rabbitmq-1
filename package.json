@@ -4,8 +4,17 @@
   "description": "Testing RabbitMQ for the first time",
   "main": "index.js",
   "scripts": {
+    "send": "babel-node src/send.js --presets '@babel/preset-env'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Rafael Minguet García",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.10.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.14.5",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.8.7"
+  }
 }
