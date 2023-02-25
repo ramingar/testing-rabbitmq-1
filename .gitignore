@@ -40,3 +40,4 @@ yarn-error.log*
 
 /.scannerwork/
 /apidoc/
+/src/config/config.js
