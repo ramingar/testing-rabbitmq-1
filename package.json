@@ -1,6 +1,6 @@
 {
   "name": "testing-rabbitmq-1",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Testing RabbitMQ for the first time",
   "main": "index.js",
   "scripts": {
