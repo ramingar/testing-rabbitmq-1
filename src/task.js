@@ -8,11 +8,11 @@ amqp.connect(config.rabbitMQUrl, (error0, connection) => {
 
         const args     = process.argv.slice(4);
         const msg      = args.slice(1).join(' ') || 'Hello World!';
-        const severity = (args.length > 0) ? args[0] : 'info';
+        const key      = (args.length > 0) ? args[0] : 'anonymous.info';
         const exchange = config.rabbitMQExchangeName;
 
-        channel.assertExchange(exchange, 'direct', {durable: false});
-        channel.publish(exchange, severity, Buffer.from(msg))
+        channel.assertExchange(exchange, 'topic', {durable: false});
+        channel.publish(exchange, key, Buffer.from(msg))
 
         console.log(` [x] Sent ${msg}`);
 
