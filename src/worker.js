@@ -10,7 +10,7 @@ const queueAssert = ({exchangeName, channel}) => (error, q) => {
     channel.consume(q.queue, queueConsumer(channel), {noAck: false})
 }
 
-const queueConsumer = channel => msg => {
+const queueConsumer = msg => {
     if (!msg.content) throw new Error('No msg.content')
 
     console.log(`[x] Received: ${msg.content.toString()}`);
