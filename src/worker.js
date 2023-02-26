@@ -1,22 +1,16 @@
 import amqp from 'amqplib/callback_api'
 import config from "./config/config";
 
-const queueAssert = ({exchangeName, channel}) => (error, q) => {
-    if (error) throw error
+const fibonacci = n => (n <= 1) ? n : fibonacci(n - 1) + fibonacci(n - 2);
 
-    console.log(`[*] Waiting for messages in ${q.queue}. To exit press CTRL+C`);
+const reply = channel => msg => {
+    const n = parseInt(msg.content.toString());
+    console.log(` [.] fib(${n})`);
+    const result = fibonacci(n);
 
-    // subscribe to every severity passed through args
-    process.argv.slice(2).forEach(key => {
-        channel.bindQueue(q.queue, exchangeName, key);
-    });
-    channel.consume(q.queue, queueConsumer, {noAck: false})
-}
+    channel.sendToQueue(msg.properties.replyTo, Buffer.from(result.toString()), {correlationId: msg.properties.correlationId});
 
-const queueConsumer = msg => {
-    if (!msg.content) throw new Error('No msg.content')
-
-    console.log(` [x] ${msg.fields.routingKey}: ${msg.content.toString()}!`);
+    channel.ack(msg);
 }
 
 
@@ -26,11 +20,13 @@ amqp.connect(config.rabbitMQUrl, (error0, connection) => {
     connection.createChannel((error1, channel) => {
         if (error1) throw error1
 
-        const args     = process.argv.slice(2);
-        const key      = (args.length > 0) ? args[0] : 'info';
-        const exchange = config.rabbitMQExchangeName;
+        const queue = config.rabbitMQQueueName
 
-        channel.assertExchange(exchange, 'topic', {durable: false})
-        channel.assertQueue('', {exclusive: true}, queueAssert({exchangeName: exchange, channel, key}));
+        channel.assertQueue(queue, {durable: false});
+        channel.prefetch(1);
+        console.log(' [x] Awaiting RPC requests');
+
+        channel.consume(queue, reply(channel))
+
     })
 })
