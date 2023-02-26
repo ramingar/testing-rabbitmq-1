@@ -6,11 +6,13 @@ amqp.connect(config.rabbitMQUrl, (error0, connection) => {
     connection.createChannel((error1, channel) => {
         if (error1) throw error1
 
-        const msg      = process.argv.slice(2).join(' ') || "Hello World!";
+        const args     = process.argv.slice(4);
+        const msg      = args.slice(1).join(' ') || 'Hello World!';
+        const severity = (args.length > 0) ? args[0] : 'info';
         const exchange = config.rabbitMQExchangeName;
 
-        channel.assertExchange(exchange, 'fanout', {durable: false});
-        channel.publish(exchange, '', Buffer.from(msg))
+        channel.assertExchange(exchange, 'direct', {durable: false});
+        channel.publish(exchange, severity, Buffer.from(msg))
 
         console.log(` [x] Sent ${msg}`);
 
