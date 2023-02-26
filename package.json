@@ -4,14 +4,16 @@
   "description": "Testing RabbitMQ for the first time",
   "main": "index.js",
   "scripts": {
-    "send": "babel-node src/task.js --presets '@babel/preset-env'",
-    "receive": "babel-node src/worker.js --presets '@babel/preset-env'",
+    "emitter": "babel-node src/task.js --presets '@babel/preset-env'",
+    "worker1": "babel-node src/worker-task-1.js --presets '@babel/preset-env'",
+    "worker2": "babel-node src/worker-task-2.js --presets '@babel/preset-env'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Rafael Minguet García",
   "license": "ISC",
   "dependencies": {
-    "amqplib": "^0.10.3"
+    "amqplib": "^0.10.3",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.5",
