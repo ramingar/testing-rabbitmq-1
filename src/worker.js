@@ -7,7 +7,7 @@ const queueAssert = ({exchangeName, channel}) => (error, q) => {
     console.log(`[*] Waiting for messages in ${q.queue}. To exit press CTRL+C`);
 
     channel.bindQueue(q.queue, exchangeName, '');
-    channel.consume(q.queue, queueConsumer(channel), {noAck: false})
+    channel.consume(q.queue, queueConsumer, {noAck: false})
 }
 
 const queueConsumer = msg => {
