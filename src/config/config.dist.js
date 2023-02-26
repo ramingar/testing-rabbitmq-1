@@ -1,4 +1,4 @@
 export default {
-    rabbitMQUrl      : 'amqp://localhost',
-    rabbitMQQueueName: 'queue1'
+    rabbitMQUrl         : 'amqp://localhost',
+    rabbitMQExchangeName: 'logs'
 };
